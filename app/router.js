@@ -6,6 +6,10 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  // this is default index behavior
+  // this.route('index', { path: '/' });
+  this.route('about');
+  this.route('contact');
 });
 
 export default Router;
