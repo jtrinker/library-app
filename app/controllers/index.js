@@ -3,11 +3,14 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-	isDisabled: true,
 	emailAddress: '',
+	isValid: Ember.computed.match('emailAddress', /^.+@.+\..+$/),
+	isDisabled: Ember.computed.not('isValid'),
+	// could also do
+	// isDisabled: Ember.computed('emailAddress', function() {
+	// 	return this.get('emailAddress') === '';
+	// }),
 
-	// computed properties are basically object properties that take other properties, stick
-	// them into a function, and compute some new value.
 	actualEmailAddress: Ember.computed('emailAddress', function() {
 		console.log('actualEmailAddress function is called: ', this.get('emailAddress'));
 	}),
@@ -15,5 +18,13 @@ export default Ember.Controller.extend({
 	// this observer will be called when the value of emailAddress changes
 	emailAddressChanged: Ember.observer('emailAddress', function() {
 		console.log('observer is called', this.get('emailAddress'));
-	})
+	}),
+
+	// actions handle user triggered events that change application state
+	actions: {
+		saveInvitation() {
+			this.set('responseMessage', `Thanks! We added your email address, ${this.get('emailAddress')}, to our list`);
+			this.set('emailAddress', '');
+		}
+	}
 });
