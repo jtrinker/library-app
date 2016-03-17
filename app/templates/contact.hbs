@@ -15,7 +15,11 @@
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default" disabled={{disableSend}}>Send</button>
+      <button type="submit" class="btn btn-default" disabled={{disableSend}} {{action 'sendMessage'}}>Send</button>
     </div>
   </div>
 </form>
+
+{{#if responseMessage}}
+    <div class="alert alert-success">{{responseMessage}}</div>
+{{/if}}
