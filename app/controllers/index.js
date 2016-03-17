@@ -3,28 +3,26 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+	headerMessage: 'Coming Soon',
+	responseMessage: '',
 	emailAddress: '',
+
 	isValid: Ember.computed.match('emailAddress', /^.+@.+\..+$/),
 	isDisabled: Ember.computed.not('isValid'),
-	// could also do
-	// isDisabled: Ember.computed('emailAddress', function() {
-	// 	return this.get('emailAddress') === '';
-	// }),
-
-	actualEmailAddress: Ember.computed('emailAddress', function() {
-		console.log('actualEmailAddress function is called: ', this.get('emailAddress'));
-	}),
-
-	// this observer will be called when the value of emailAddress changes
-	emailAddressChanged: Ember.observer('emailAddress', function() {
-		console.log('observer is called', this.get('emailAddress'));
-	}),
 
 	// actions handle user triggered events that change application state
 	actions: {
 		saveInvitation() {
-			this.set('responseMessage', `Thanks! We added your email address, ${this.get('emailAddress')}, to our list`);
-			this.set('emailAddress', '');
+			const email = this.get('emailAddress');
+			const newInvitation = this.store.createRecord('invitation', {
+				email: email
+			});
+
+			// save() tries to make a network request
+			newInvitation.save();
+
+			this.set('responseMessage', `Thank you! We saved your email address: ${this.get('emailAddress')}`);
+      this.set('emailAddress', '');
 		}
 	}
 });
