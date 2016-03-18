@@ -18,11 +18,13 @@ export default Ember.Controller.extend({
 				email: email
 			});
 
-			// save() tries to make a network request
-			newInvitation.save();
-
-			this.set('responseMessage', `Thank you! We saved your email address: ${this.get('emailAddress')}`);
-      this.set('emailAddress', '');
+			// save method on Ember Data Model is a Promise. It promises it is trying to save data.
+			// It could be successful or maybe return with error
+			newInvitation.save().then((res) => {
+				this.set('responseMessage', `Thank you! We saved your email address: ${this.get('emailAddress')}
+					 ${res.get('id')}`);
+      			this.set('emailAddress', '');
+			});
 		}
 	}
 });
